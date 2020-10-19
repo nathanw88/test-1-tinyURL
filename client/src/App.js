@@ -11,7 +11,7 @@ class App extends Component {
         <div>
           <Switch>
             <Route exact path="/" component={Uploader} />
-            <Route exact path="/photos/:id" component ={Photos}/>
+            <Route path="/photos/:id" component ={Photos}/>
           </Switch>
         </div>
       </Router>
