@@ -28,9 +28,9 @@ class Photos extends React.Component {
 
     return (
       
-      <Jumbotron>
+      <Jumbotron style = "margins = auto">
       <h1>{this.state.title}</h1>
-      <img src={this.state.imageUrl} alt={this.state.title}/>
+      <img src={this.state.imageUrl} alt={this.state.title} width="500" height="600"/>
       <figcaption>{this.state.caption}</figcaption>
       </Jumbotron>
     );
