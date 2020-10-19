@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Uploader from "./pages/Uploader/Uploader"
+import Photos from "./pages/Photos/Photos"
 
 class App extends Component {
   render() {
@@ -9,6 +10,7 @@ class App extends Component {
         <div>
           <Switch>
             <Route exact path="/" component={Uploader} />
+            <Route exact path="/photos/:id" component ={Photos}/>
           </Switch>
         </div>
       </Router>

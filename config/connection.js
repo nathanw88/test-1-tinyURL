@@ -10,7 +10,7 @@ if (process.env.JAWSDB_URL) {
         port: 3307,
         user: "root",
         password: "root",
-        database: "tinyURL"
+        database: "tiny_url"
     });
 }
 
