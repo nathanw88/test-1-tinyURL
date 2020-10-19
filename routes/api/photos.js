@@ -21,4 +21,10 @@ router.post("/saveInfo", (req, res)=>{
   })
 })
 
+router.get("/photo/:id", (req, res)=>{
+  photos.selectWhere(req.params.id, (data)=>{
+    return res.json(data)
+  })
+})
+
 module.exports = router;

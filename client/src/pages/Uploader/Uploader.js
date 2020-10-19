@@ -34,7 +34,7 @@ class Uploader extends React.Component {
       const { title, caption } = this.state
       const { imageUrl } = res.data
       axios.post(`/api/photos/saveinfo`, {title, caption, imageUrl}).then(res=>{
-        console.log(res)
+        window.location.replace(`/photos/${res.data}`)
       });
     });
   }
