@@ -2,11 +2,14 @@
   "name": "tin_url",
   "version": "1.0.0",
   "main": "server.js",
+  "license": "UNLICENSED",
   "dependencies": {
+    "@google-cloud/storage": "^5.3.0",
     "concurrently": "^5.3.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "if-env": "^1.0.4",
+    "multer": "^1.4.2",
     "nodemon": "^2.0.5"
   },
   "scripts": {
@@ -16,7 +19,7 @@
     "start:prod": "node server.js",
     "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client\"",
     "client": "cd client && npm run start",
-    "install": "cd client && npm install",
+    "install": "cd client && yarn install",
     "build": "cd client && npm run build",
     "heroku-postbuild": "npm run build"
   }
