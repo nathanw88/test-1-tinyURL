@@ -1,0 +1,24 @@
+img {
+  max-width: 100%;
+  height: auto;
+}
+h1{
+  text-align: center;
+}
+figcaption{
+  text-align: center;
+}
+#mainContainer{
+  position: fixed;
+  background-size: cover;
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0;
+  overflow-y: scroll; 
+  background-color: black;
+}
+#flowerContainer{
+  margin: 4%;
+  background-color: rgba(106, 231, 240, 0.50);
+}

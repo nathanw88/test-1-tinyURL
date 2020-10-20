@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { Jumbotron } from 'reactstrap';
 import DocumentMeta from 'react-document-meta';
+import "./Photos.css"
 
 class Photos extends React.Component {
 
@@ -17,7 +18,7 @@ class Photos extends React.Component {
   componentDidMount() {
     axios.get(`/api/photos/photo/${this.props.match.params.id}`).then(res => {
       console.log(res)
-      const{title, caption, imageUrl} = res.data[0]
+      const { title, caption, imageUrl } = res.data[0]
       this.setState({
         title, caption, imageUrl
       });
@@ -40,11 +41,14 @@ class Photos extends React.Component {
 
     return (
       <DocumentMeta {...meta}>
-      <Jumbotron>
-      <h1>{this.state.title}</h1>
-      <img src={this.state.imageUrl} alt={this.state.title}/>
-      <figcaption>{this.state.caption}</figcaption>
-      </Jumbotron>
+        <div id="mainContainer">
+          <Jumbotron id="flowerContainer" >
+            <h1>{this.state.title}</h1>
+            <img src={this.state.imageUrl} alt={this.state.title} />
+            <figcaption>{this.state.caption}</figcaption>
+          </Jumbotron>
+        </div>
+
       </DocumentMeta>
     );
 
