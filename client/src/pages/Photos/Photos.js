@@ -1,6 +1,8 @@
 import React from "react";
 import axios from "axios";
 import { Jumbotron } from 'reactstrap';
+import DocumentMeta from 'react-document-meta';
+
 class Photos extends React.Component {
 
   constructor(props) {
@@ -26,13 +28,24 @@ class Photos extends React.Component {
 
   render() {
 
+    const meta = {
+      title: this.state.title,
+      description: this.state.caption,
+      meta: {
+        charset: 'utf-8',
+        type: "image",
+        image: this.state.imageUrl
+      }
+    };
+
     return (
-      
+      <DocumentMeta {...meta}>
       <Jumbotron>
       <h1>{this.state.title}</h1>
       <img src={this.state.imageUrl} alt={this.state.title}/>
       <figcaption>{this.state.caption}</figcaption>
       </Jumbotron>
+      </DocumentMeta>
     );
 
   }
