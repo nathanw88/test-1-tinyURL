@@ -9,6 +9,7 @@ figcaption{
   text-align: center;
 }
 #mainContainer{
+  font-family: 'Abril Fatface', cursive;
   position: fixed;
   background-size: cover;
   top: 0; 
