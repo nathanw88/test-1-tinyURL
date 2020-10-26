@@ -44,6 +44,7 @@ class Uploader extends React.Component {
 
     return (
       <div id="mainContainer">
+        <img id ="logo" src={require("../../images/logo.png")} alt="Logo" />
 
         <Jumbotron id="uploaderContainer">
           <Dropzone multiple={false} maxSize={10000000} onDrop={this.onDrop}>
