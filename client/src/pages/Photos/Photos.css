@@ -1,7 +1,5 @@
-img {
-  max-width: 100%;
-  height: auto;
-}
+
+
 h1{
   text-align: center;
 }
@@ -9,6 +7,7 @@ figcaption{
   text-align: center;
 }
 #mainContainer{
+  display: block;
   font-family: 'Abril Fatface', cursive;
   position: fixed;
   background-size: cover;
@@ -19,7 +18,26 @@ figcaption{
   overflow-y: scroll; 
   background-color: black;
 }
-#flowerContainer{
-  margin: 4%;
-  background-color: rgba(106, 231, 240, 0.50);
+#midContainer{
+  padding: 1%;
+  margin: 2.5% auto;
+  max-width: 50vw;
+  background-color: rgba(106, 231, 240, 0.4);
+}
+.imageContainer{
+  display: flex;
+}
+.imageContainer > img{
+  margin: 5px auto;
+  max-width: 70vw;
+  max-height: 75vh;
+}
+
+@media screen and (max-width: 1024px) {
+
+  #midContainer{
+    margin: 18% auto;
+    max-width: 90vw;
+  }
+
 }
