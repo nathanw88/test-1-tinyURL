@@ -17,6 +17,7 @@ class Photos extends React.Component {
     };
   }
   componentDidMount() {
+    //grab photo just uploaded
     axios.get(`/api/photos/photo/${this.props.match.params.id}`).then(res => {
       console.log(res)
       const { title, caption, imageUrl } = res.data[0]
