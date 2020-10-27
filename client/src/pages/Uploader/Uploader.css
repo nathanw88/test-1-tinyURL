@@ -4,9 +4,6 @@
   margin-right: 20%;
   margin-top: 5%;
   background-color: rgb(106, 106, 141, .25);
-}
-
-label{
   color: antiquewhite;
 }
 
@@ -16,3 +13,6 @@ label{
   margin-right: auto;
 }
 
+#removeImg{
+  font-size: large;
+}

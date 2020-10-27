@@ -4,6 +4,7 @@ import { Button, Jumbotron, FormGroup, Label, Input, Form } from 'reactstrap';
 import axios from "axios"
 import "./Uploader.css"
 
+
 class Uploader extends React.Component {
 
   constructor(props) {
@@ -12,15 +13,27 @@ class Uploader extends React.Component {
     this.state = {
       title: "",
       caption: "",
-      image: new FormData()
+      image: new FormData(),
+      imageUploaded: false
     };
   }
   //Saves image to state
   onDrop = acceptedFiles => {
-    const image = this.state.image;
+    let { image, imageUploaded} = this.state;
     image.append("image", acceptedFiles[0]);
-    this.setState({ image });
+    imageUploaded = true;
+    this.setState({ image, imageUploaded });
   };
+
+  removeImage= ()=>{
+    let { image, imageUploaded} = this.state;
+    image = new FormData();
+    imageUploaded = false;
+    this.setState({ image, imageUploaded });
+    console.log(this.state)
+  };
+
+
   // handles changes to title and caption
   handleInputChange = event => {
     const { name, value } = event.target;
@@ -44,17 +57,25 @@ class Uploader extends React.Component {
 
     return (
       <div id="mainContainer">
-        <img id ="logo" src={require("../../images/logo.png")} alt="Logo" />
+        <a href="/">
+        <img id="logo" src={require("../../images/logo.png")} alt="Logo" />
+          </a>
 
         <Jumbotron id="uploaderContainer">
-          <Dropzone multiple={false} maxSize={10000000} onDrop={this.onDrop}>
+
+          <Dropzone multiple={false} maxSize={10000000} accept="image/*" onDrop={this.onDrop}>
             {({ getRootProps, getInputProps }) => (
-              <span {...getRootProps()}>
-                <input {...getInputProps()} />
-                <Button id="uploadButton" >Add image</Button>
-              </span>
+              <section>
+                <div {...getRootProps()}>
+                  <input {...getInputProps()} />
+                  <p id="dropzoneText">Drag 'n' drop image here, or click to select file </p>
+                </div>
+              </section>
             )}
           </Dropzone>
+            {this.state.imageUploaded? <p>Image Uploaded  <Button onClick={this.removeImage} id="removeImg"> Remove image &#9746;</Button></p>:<p>No image uploaded</p>}
+
+
           <Form>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
               <Label for="title" className="mr-sm-2">Title</Label>
@@ -68,9 +89,7 @@ class Uploader extends React.Component {
             <Button id="saveButton"
               disabled={
                 !(
-                  this.state.title &&
-                  this.state.caption &&
-                  this.state.image
+                  this.state.imageUploaded
                 )
               }
               onClick={() => this.save()}

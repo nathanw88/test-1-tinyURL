@@ -33,10 +33,19 @@ figcaption{
   max-height: 75vh;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1165px) {
 
   #midContainer{
-    margin: 18% auto;
+    margin: 7% auto;
+    max-width: 75vw;
+  }
+
+}
+
+@media screen and (max-width: 835px) {
+
+  #midContainer{
+    margin: 15% auto;
     max-width: 90vw;
   }
 

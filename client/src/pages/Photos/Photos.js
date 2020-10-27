@@ -5,6 +5,7 @@ import DocumentMeta from 'react-document-meta';
 import "./Photos.css"
 import Imgix from "react-imgix";
 
+
 class Photos extends React.Component {
 
   constructor(props) {
@@ -39,15 +40,19 @@ class Photos extends React.Component {
         type: "image",
         image: this.state.imageUrl
       }
+
     };
 
     return (
       <DocumentMeta {...meta}>
         <div id="mainContainer">
+          <a href="/">
+            <img id="logo" src={require("../../images/logo.png")} alt="Logo" />
+          </a>
           <Jumbotron id="midContainer" >
             <h1>{this.state.title}</h1>
             <div className="imageContainer">
-            <Imgix src={this.state.imageUrl} alt={this.state.title} sizes="calc(80% - 8px)"/>
+              <Imgix src={this.state.imageUrl} alt={this.state.title} sizes="calc(80% - 8px)" />
             </div>
             <figcaption>{this.state.caption}</figcaption>
           </Jumbotron>
