@@ -18,7 +18,7 @@ class Photos extends React.Component {
     };
   }
   componentDidMount() {
-    //grab photo just uploaded
+    //grab photo just uploaded by id
     axios.get(`/api/photos/photo/${this.props.match.params.id}`).then(res => {
       console.log(res)
       const { title, caption, imageUrl } = res.data[0]
@@ -31,16 +31,17 @@ class Photos extends React.Component {
   }
 
   render() {
-
+    //setting open graph metadata
     const meta = {
-      title: this.state.title,
-      description: this.state.caption,
       meta: {
-        charset: 'utf-8',
-        type: "image",
-        image: this.state.imageUrl
+        property: {
+          "og:title": this.state.title,
+          "og:description": this.state.caption,
+          "og:image": this.state.imageUrl,
+          "og:type": "image",
+          "og:url": window.location.pathname
+        },
       }
-
     };
 
     return (
