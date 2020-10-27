@@ -3,7 +3,7 @@ const {Storage} = require("@google-cloud/storage");
 
 const gcs = new Storage({
   projectId: "tinyurl-293016",
-  keyFilename: "./tinyurl-293016-30fb28c7dbf3.json"
+  keyFilename: "./tinyurl-293016-f86c0f293e7e.json"
  
 });
 
@@ -11,8 +11,8 @@ const bucketName = "tiny-url-images";
 const bucket = gcs.bucket(bucketName);
 
 function getPublicUrl(filename) {
-
-  return "https://storage.googleapis.com/" + bucketName + "/" + filename;
+  
+ return "https://storage.googleapis.com/" + bucketName + "/" + filename;
 }
 
 let ImgUpload = {};
