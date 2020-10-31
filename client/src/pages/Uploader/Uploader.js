@@ -13,81 +13,80 @@ class Uploader extends React.Component {
       title: "Title",
       caption: "Caption",
       imageUploaded: false,
-      signedUrl: "",
-      image: new FormData
+      image: new FormData(),
+      imageUrl: require("../../images/download.png"),
+      status: "No Image Loaded"
     };
   }
 
-  componentDidMount() {
-    let { signedUrl } = this.state;
-    //grab photo just uploaded by id
-    axios.get(`/api/photos/uploadUrl`).then(res => {
 
-      this.setState({ signedUrl: res.data })
-    })
-  }
   //Saves image to state
-  onDrop = (acceptedFile, maxSize, lossyQuality = .95) => {
-    let { image, imageUploaded } = this.state;
-    const file = acceptedFile[0];
-    let img = document.getElementById("compressedImage")
-
-    let dataUrlToFile = (src) => {
-      return (fetch(src)
-        .then((res) => { return res.arrayBuffer(); })
-        .then((buf) => { return new File([buf], this.state.title, { type: "png" }) })
-        .then((file) => {
-          image.append("image", file);
-          imageUploaded = true;
-          this.setState({ image, imageUploaded })
-        })
-      )
-    }
-
-    let getSize = () => {
-      const { maxWidth, maxHeight } = maxSize;
-
-      let width = img.width;
-      let height = img.height;
-
-      if (maxWidth === undefined || maxHeight === undefined) return { width, height }
-
-      if (width > height) {
-        if (width > maxWidth) {
-          height *= maxWidth / width;
-          width = maxWidth;
-        }
-      } else {
-        if (height > maxHeight) {
-          width *= maxHeight / height;
-          height = maxHeight;
-        }
-      }
-      return { width, height }
-    }
-
-    let canvas = document.createElement("canvas")
+  onDrop = (acceptedFiles, maxSize, lossyQuality = .95) => {
+    let { image, imageUrl, imageUploaded } = this.state;
+    this.setState({ status: "Please Wait For Image To Load" })
+    const acceptedFile = acceptedFiles[0];
     let reader = new FileReader();
-    reader.onload = function (e) { img.src = e.target.result }
-    reader.readAsDataURL(file);
+    // let img = document.getElementById("uploadImage")
+    reader.onload = (e) => {
+      let img = new Image()
+      img.src = e.target.result;
+      img.onload = () => {
+        let canvas = document.getElementById("compressCanvas");
 
-    let ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0);
-    const { width, height } = getSize()
-    console.log(width + " " + height)
-    canvas.width = width;
-    canvas.height = height;
-    ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0, width, height);
+        let dataUrlToFile = (src) => {
+          return (fetch(src)
+            .then((res) => { return res.arrayBuffer(); })
+            .then((buf) => { return new File([buf], this.state.title, { type: "png" }) })
+            .then((file) => {
+              image.append("image", file);
+              imageUploaded = true;
+              this.setState({ image, imageUrl, imageUploaded })
+            })
+          )
+        }
+        let getSize = () => {
+          const { maxWidth, maxHeight } = maxSize;
 
-    let dataUrl = canvas.toDataURL("image/png", lossyQuality);
+          let width = img.width;
+          let height = img.height;
 
-    dataUrlToFile(dataUrl);
-    // this.setState({ imageUrl, imageUploaded })
+          if (maxWidth === undefined || maxHeight === undefined) return { width, height }
 
-    // let { image, imageUploaded} = this.state;
-    // image.append("image", acceptedFiles[0]);
-    // this.setState({ image, imageUploaded });
+          if (width > height) {
+            if (width > maxWidth) {
+              height *= maxWidth / width;
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width *= maxHeight / height;
+              height = maxHeight;
+            }
+          }
+          return { width, height }
+        }
+        if (lossyQuality > 1 || lossyQuality > 0) lossyQuality = .95
+
+        console.log(img.width + " " + img.height)
+
+        console.log(img.width + " " + img.height)
+        const { width, height } = getSize();
+        let ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        canvas.width = width;
+        canvas.height = height;
+        ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        let dataUrl = canvas.toDataURL("image/png", lossyQuality);
+        document.getElementById('uploadImage').src = dataUrl;
+        imageUrl = dataUrl
+        dataUrlToFile(dataUrl);
+
+
+
+      }
+    }
+    reader.readAsDataURL(acceptedFile);
   };
 
   removeImage = () => {
@@ -95,7 +94,6 @@ class Uploader extends React.Component {
     image = new FormData();
     imageUploaded = false;
     this.setState({ image, imageUploaded });
-    console.log(this.state)
   };
 
 
@@ -108,43 +106,17 @@ class Uploader extends React.Component {
   };
 
   save = () => {
-    const { signedUrl, image } = this.state;
+    const { image } = this.state;
 
-    //Send image data to backend to save to google cloud
-    // axios.post(`/api/photos/upload`, this.state.image).then(res => {
-
-    console.log(this.state)
-    let url = `https://cors-anywhere.herokuapp.com/${signedUrl}`;
-    
-    axios({
-      method: "put",
-      url: signedUrl,
-      header:{"content-type": "application/octet-stream"},
-      body: image.get("image"),
-    }).then(res => {
-      console.log(res)
+    // Send image data to backend to save to google cloud
+    axios.post(`/api/photos/upload`, image).then(res => {
+      const { title, caption } = this.state
+      const { imageUrl } = res.data
+      axios.post(`/api/photos/saveinfo`, { title, caption, imageUrl }).then(res => {
+        window.location.replace(`/photos/${res.data}`)
+      });
     })
 
-    const uploadHandler = async () => {
-      try {
-        const response = await fetch(signedUrl, {
-          method: 'PUT',
-          body: image.get("image"),
-        });
-        console.log(response)
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-
-    uploadHandler()
-
-    // const { title, caption } = this.state
-    // const { imageUrl } = res.data
-    // axios.post(`/api/photos/saveinfo`, { title, caption, imageUrl }).then(res => {
-    //   window.location.replace(`/photos/${res.data}`)
-    // });
-    // });
   }
 
   render() {
@@ -159,7 +131,7 @@ class Uploader extends React.Component {
 
           <Dropzone multiple={false} maxSize={10000000} accept="image/*" onDrop={this.onDrop}>
             {({ getRootProps, getInputProps }) => (
-              <section>
+              <section id="dropzone">
                 <div {...getRootProps()}>
                   <input {...getInputProps()} />
                   <p id="dropzoneText">Drag 'n' drop image here, or click to select file </p>
@@ -168,9 +140,13 @@ class Uploader extends React.Component {
               </section>
             )}
           </Dropzone>
-          <div className="imageContainer">
-            <img id="compressedImage" src="" alt="No picture uploaded" sizes="calc(80% - 8px)" />
+          <div className="downloadContainer">
+          <img src={this.state.imageUrl}/>
           </div>
+            <p hidden={this.state.imageUploaded}>{this.state.status}</p>
+
+          <Button onClick={this.removeImage} hidden={!this.state.imageUploaded} id="removeImg"> Remove image &#9746;</Button>
+
           <Form>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
               <Label for="title" className="mr-sm-2">Title</Label>
@@ -193,6 +169,9 @@ class Uploader extends React.Component {
           </Button>
           </Form>
         </Jumbotron>
+        <img hidden={true} id="uploadImage" src='' width={640} height={425} alt="Waiting To Uploaded" />
+
+        <canvas hidden={true} width={640} height={425} id="compressCanvas" />
       </div>
     );
 

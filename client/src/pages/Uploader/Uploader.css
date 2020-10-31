@@ -17,3 +17,20 @@
   font-size: large;
 }
 
+#dropzone{
+  border-style: dashed;
+  border-width: 2px;
+  border-color: blue;
+}
+
+.downloadContainer{
+  display: flex;
+}
+.downloadContainer > img{
+  margin: 5px auto;
+  max-width: 80%;
+  max-height: 50%;
+  min-width: 20%;
+  min-height: 20%;
+
+}

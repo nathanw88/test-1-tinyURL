@@ -6,39 +6,7 @@ const multer = Multer({
   storage: Multer.MemoryStorage,
   fileSize: 1e+7
 });
-const { Storage } = require("@google-cloud/storage");
-const uuid = require('uuid');
 
-
-router.get("/uploadUrl", (reg, res) => {
-  const storage = new Storage({
-    projectId: "tinyurl-293016",
-    keyFilename: "./tinyurl-293016-f86c0f293e7e.json"
-
-  });
-  const bucketName = "tiny-url-images";
-
-  async function generateV4UploadSignedUrl() {
-    // These options will allow temporary uploading of the file with outgoing
-    // Content-Type: application/octet-stream header.
-    const options = {
-      version: 'v4',
-      action: 'write',
-      expires: Date.now() + 15 * 60 * 1000, // 15 minutes
-      contentType: 'application/octet-stream',
-    };
-
-    const [url] = await storage
-      .bucket(bucketName)
-      .file(uuid.v4())
-      .getSignedUrl(options);
-
-    res.send(url)
-  }
-
-  generateV4UploadSignedUrl()
-
-})
 //client request contains photo to be saved to google bucket server response is photo url
 router.post("/upload", multer.single("image"), imgUpload.uploadToGcs, (req, res) => {
   const data = req.body;
